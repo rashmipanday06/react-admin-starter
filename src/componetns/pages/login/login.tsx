@@ -1,7 +1,8 @@
+import Input from "../../common/input"
 
 const login = () => {
   return (
-    <div>login</div>
+    <div><Input/></div>
   )
 }
 
