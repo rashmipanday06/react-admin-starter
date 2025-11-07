@@ -25,7 +25,7 @@ const Input:FC<InputProps> = (props):ReactElement => {
     const{type, name, value, placeholder, onChange, onClick, disabled, required, classes, label}=props
   return (
     <div className={classes?.inputWrapper}>
-        {label&& <p>{label}</p>}
+        {label&& <span>{label}</span>}
         <input
         type={type}
         name={name}
