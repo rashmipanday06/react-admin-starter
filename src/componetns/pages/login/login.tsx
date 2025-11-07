@@ -1,7 +1,18 @@
-
+import { useDispatch } from "react-redux"
+import Button from "../../common/button"
+import Input from "../../common/input"
+import style from './style.module.css'
 const login = () => {
+  const user= useDispatch
   return (
-    <div>login</div>
+    <div className={style.container}>
+
+ <span>Login</span>     
+    <Input label="UserName" classes={{input:style.input}}/>
+    <Input label="Password"/>
+
+    <Button >Submit</Button>
+    </div>
   )
 }
 
