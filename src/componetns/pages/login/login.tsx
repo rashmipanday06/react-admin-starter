@@ -8,7 +8,7 @@ const login = () => {
     <div className={style.container}>
       <h2>Login</h2>
       <Input label="UserName" classes={{ input: style.input }} />
-      <Input label="Password" />
+      <Input label="Password"  type="password"/>
 
       <Button>Submit</Button>
     </div>

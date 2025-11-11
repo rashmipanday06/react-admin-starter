@@ -19,6 +19,7 @@ type InputProps = {
   required?: boolean;
   classes?: classType;
   label?:string;
+ 
 };
 
 const Input:FC<InputProps> = (props):ReactElement => {
