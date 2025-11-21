@@ -1,0 +1,108 @@
+/* Dashboard Container */
+.container {
+  padding: 20px;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Page Heading */
+.container h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Card Wrapper */
+.cardWrapper {
+  display: flex;
+  gap: 8%;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+/* Individual Card */
+.card {
+  background: #ffffff;
+  padding: 22px;
+  width: 220px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 30px;
+  color: #222;
+  font-weight: 700;
+}
+
+.card p {
+  margin-top: 8px;
+  color: #666;
+  font-size: 15px;
+}
+
+/* Table Wrapper */
+.tableWrapper {
+  margin-top: 40px;
+}
+
+.tableWrapper h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.table th,
+.table td {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 15px;
+}
+
+.table thead {
+  background: #f3f3f3;
+}
+
+.table th {
+  font-weight: 600;
+  color: #444;
+}
+
+/* Rows */
+.table tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.table tbody tr:hover {
+  background-color: #f0f8ff;
+  transition: 0.2s ease;
+}
+
+.table td {
+  color: #333;
+}
+
+/* Responsive for Mobile */
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+}

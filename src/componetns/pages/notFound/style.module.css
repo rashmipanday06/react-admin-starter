@@ -1,0 +1,39 @@
+.notfoundContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding-top: 80px;
+  padding-bottom: 80px;
+
+  min-height: calc(86dvh - 160px); /* dynamic height, not fixed */
+  background: #f5f5f5;
+}
+
+.notfoundTitle {
+  font-size: 80px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.notfoundText {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.notfoundButton {
+  text-decoration: none;
+  background: #007bff;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.notfoundButton:hover {
+  background: #0056b3;
+}
