@@ -1,0 +1,13 @@
+{
+  "stats": {
+    "users": 1200,
+    "orders": 350,
+    "revenue": 75000,
+    "pending": 42
+  },
+  "recentUsers": [
+    { "id": 1, "name": "Amit Sharma", "role": "Admin" },
+    { "id": 2, "name": "Riya Patel", "role": "User" },
+    { "id": 3, "name": "John Khan", "role": "Moderator" }
+  ]
+}
