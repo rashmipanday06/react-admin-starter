@@ -41,6 +41,22 @@ const Users = () => {
   const handleAddUser = () => {
     navigate("/create-user");
   };
+const handleUserEdit = (id: number) => {
+  navigate(`/edit-user/${id}`);
+};
+
+const handleDeleteUser = (id: number) => {
+  if (!window.confirm("Are you sure you want to delete this user?")) return;
+
+  const stored = JSON.parse(localStorage.getItem("users") || "[]");
+
+  const updated = stored.filter((u: any) => u.id !== id);
+
+  localStorage.setItem("users", JSON.stringify(updated));
+
+  setAllUsers((prev) => prev.filter((u) => u.id !== id));
+};
+
 
   return (
     <div className={styles.container}>
@@ -79,8 +95,8 @@ const Users = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td className={styles.actions}>
-                <button className={styles.edit}>Edit</button>
-                <button className={styles.delete}>Delete</button>
+                <button className={styles.edit} onClick={() => handleUserEdit(user.id)}>Edit</button>
+                <button className={styles.delete} onClick={() => handleDeleteUser(user.id)}>Delete</button>
               </td>
             </tr>
           ))}

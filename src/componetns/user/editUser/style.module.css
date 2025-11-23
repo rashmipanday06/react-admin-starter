@@ -1,0 +1,77 @@
+.container {
+  max-width: 450px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.heading {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #333;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.label {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.input:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
+}
+
+.button {
+  margin-top: 10px;
+  padding: 12px;
+  background-color: #4a90e2;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.button:hover {
+  background-color: #357abd;
+}
+
+.backButton {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border: none;
+  color: #444;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: #e1e1e1;
+}
+
