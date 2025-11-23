@@ -26,6 +26,7 @@ export default function NavBar() {
           <>
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/user">Users</Link></li>
+            <li><Link to="/orders">Orders</Link></li>
 
             <li>
               <button className={styles.logoutBtn} onClick={handleLogout}>

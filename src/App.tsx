@@ -10,6 +10,7 @@ import ProtectedRoute from "./routes/protectedRoute";
 import NavBar from "./componetns/navbar";
 import CreateUser from "./componetns/user/createUser";
 import EditUser from "./componetns/user/editUser";
+import Orders from "./componetns/pages/order";
 
 function App() {
   const { token } = useAuth();   // ⬅ Get login status
@@ -58,6 +59,14 @@ function App() {
   element={
     <ProtectedRoute>
       <EditUser />
+    </ProtectedRoute>
+  }
+/>
+       <Route
+  path="/orders"
+  element={
+    <ProtectedRoute>
+      <Orders />
     </ProtectedRoute>
   }
 />
