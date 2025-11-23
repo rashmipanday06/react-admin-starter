@@ -8,6 +8,7 @@ import Users from "./componetns/pages/users";
 import ProtectedRoute from "./routes/protectedRoute";
 
 import NavBar from "./componetns/navbar";
+import CreateUser from "./componetns/createUser";
 
 function App() {
   const { token } = useAuth();   // ⬅ Get login status
@@ -42,6 +43,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+<Route path="/create-user" element={<CreateUser />} />
 
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
