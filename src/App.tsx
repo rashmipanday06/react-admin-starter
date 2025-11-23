@@ -13,7 +13,7 @@ import EditUser from "./componetns/user/editUser";
 import Orders from "./componetns/pages/order";
 
 function App() {
-  const { token } = useAuth();   // ⬅ Get login status
+  const { token } = useAuth(); // ⬅ Get login status
 
   return (
     <>
@@ -31,16 +31,17 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin", "manager"]}>
               <Dashboard />
             </ProtectedRoute>
           }
         />
 
+
         <Route
           path="/user"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin"]}>
               <Users />
             </ProtectedRoute>
           }
@@ -54,23 +55,22 @@ function App() {
             </ProtectedRoute>
           }
         />
-       <Route
-  path="/edit-user/:id"
-  element={
-    <ProtectedRoute>
-      <EditUser />
-    </ProtectedRoute>
-  }
-/>
-       <Route
-  path="/orders"
-  element={
-    <ProtectedRoute>
-      <Orders />
-    </ProtectedRoute>
-  }
-/>
-
+        <Route
+          path="/edit-user/:id"
+          element={
+            <ProtectedRoute>
+              <EditUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
 
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
