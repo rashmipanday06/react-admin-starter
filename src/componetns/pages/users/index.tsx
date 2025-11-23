@@ -1,24 +1,51 @@
-import  { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./style.module.css";
+import { useNavigate } from "react-router-dom";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
 
 const Users = () => {
   const [search, setSearch] = useState("");
+  const [allUsers, setAllUsers] = useState<User[]>([]);
 
-  const users = [
+  const navigate = useNavigate();
+
+  // Default hardcoded users
+  const defaultUsers = [
     { id: 1, name: "Amit Sharma", email: "amit@gmail.com", role: "Admin" },
     { id: 2, name: "Riya Patel", email: "riya@gmail.com", role: "User" },
-    { id: 3, name: "John Khan", email: "john@gmail.com", role: "Moderator" }
+    { id: 3, name: "John Khan", email: "john@gmail.com", role: "Moderator" },
   ];
 
-  const filtered = users.filter((u) =>
+  // Load both default + new localStorage users
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("users") || "[]");
+
+    // Show newest created users FIRST
+    const sortedStored = stored.sort((a:User, b:User) => b.id - a.id);
+
+    // Combine: new users on top + default users
+    setAllUsers([...sortedStored, ...defaultUsers]);
+  }, []);
+
+  // Search filter
+  const filtered = allUsers.filter((u) =>
     u.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleAddUser = () => {
+    navigate("/create-user");
+  };
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Users</h2>
 
-      {/* Top bar */}
       <div className={styles.topBar}>
         <input
           type="text"
@@ -28,10 +55,11 @@ const Users = () => {
           className={styles.search}
         />
 
-        <button className={styles.addButton}>+ Add User</button>
+        <button className={styles.addButton} onClick={handleAddUser}>
+          + Add User
+        </button>
       </div>
 
-      {/* Table */}
       <table className={styles.table}>
         <thead>
           <tr>
@@ -39,7 +67,7 @@ const Users = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Role</th>
-            <th >Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
