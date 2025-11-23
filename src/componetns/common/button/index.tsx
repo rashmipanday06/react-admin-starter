@@ -1,16 +1,15 @@
 import type { FC, ReactElement, ReactNode } from "react";
-
 import style from "./style.module.css";
 
-type buttonPropType = {
+type ButtonProps = {
   children: ReactNode;
-  onclick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
-const Button: FC<buttonPropType> = (props): ReactElement => {
-  const { children, onclick } = props;
+
+const Button: FC<ButtonProps> = ({ children, onClick }): ReactElement => {
   return (
     <div>
-      <button onClick={onclick} className={style.button}>
+      <button onClick={onClick} className={style.button}>
         {children}
       </button>
     </div>
