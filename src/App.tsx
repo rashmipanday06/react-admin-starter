@@ -1,20 +1,50 @@
-// import './App.css'
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { useAuth } from "./componetns/context/authContext";
+
 import Login from "./componetns/pages/login/login";
 import Dashboard from "./componetns/pages/dashboard";
 import NotFound from "./componetns/pages/notFound";
 import Users from "./componetns/pages/users";
+import ProtectedRoute from "./routes/protectedRoute";
+
+import NavBar from "./componetns/navbar";
 
 function App() {
+  const { token } = useAuth();   // ⬅ Get login status
+
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/user" element={<Users />} />
+      {/* Show navbar only if logged in */}
+      {token && <NavBar />}
 
-        {/* 404 Page */}
-        <Route path="/notFound" element={<NotFound />} />
+      <Routes>
+        {/* Default redirect */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        {/* Public login route */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 404 page */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
