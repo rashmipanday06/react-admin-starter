@@ -8,6 +8,8 @@ import Users from "./componetns/pages/users";
 import ProtectedRoute from "./routes/protectedRoute";
 
 import NavBar from "./componetns/navbar";
+import CreateUser from "./componetns/user/createUser";
+import EditUser from "./componetns/user/editUser";
 
 function App() {
   const { token } = useAuth();   // ⬅ Get login status
@@ -24,7 +26,7 @@ function App() {
         {/* Public login route */}
         <Route path="/login" element={<Login />} />
 
-        {/* Protected routes */}
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
@@ -42,6 +44,24 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/create-user"
+          element={
+            <ProtectedRoute>
+              <CreateUser />
+            </ProtectedRoute>
+          }
+        />
+       <Route
+  path="/edit-user/:id"
+  element={
+    <ProtectedRoute>
+      <EditUser />
+    </ProtectedRoute>
+  }
+/>
+
 
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
