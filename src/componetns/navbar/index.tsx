@@ -31,9 +31,9 @@ export default function NavBar() {
         {token ? (
           <>
             {/* Dashboard visible for all roles */}
-            <li>
+            {["admin", "manager"].includes(role)&&<li>
               <Link to="/dashboard">Dashboard</Link>
-            </li>
+            </li>}
 
             {/* Only Admin sees Users */}
             {role === "admin" && (

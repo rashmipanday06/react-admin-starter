@@ -1,38 +1,61 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./style.module.css";
 import { useAuth } from "../../context/authContext";
 
 interface Order {
   id: number;
   customerEmail: string;
-  status: string; // "Pending", "Accepted", "Canceled", "Edited"
+  productName: string; // added product name
+  status: "Pending" | "Accepted" | "Canceled" | "Edited";
   amount: number;
   createdAt: string;
 }
 
 const Orders = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
 
+  // Load orders based on role
+const loadOrders = () => {
+  const storedOrders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
+  if (!user) {
+    setOrders([]);
+    return;
+  }
+
+  let filteredOrders: Order[] = [];
+
+  switch (user.role) {
+    case "admin":
+    case "manager":
+      filteredOrders = storedOrders; // all orders
+      break;
+    case "customer":
+      filteredOrders = storedOrders.filter((o) => o.customerEmail === user.email);
+      break;
+    default:
+      filteredOrders = [];
+  }
+
+  // Sort by createdAt descending (newest first)
+  filteredOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  setOrders(filteredOrders);
+};
+
   useEffect(() => {
-    const storedOrders: Order[] = JSON.parse(
-      localStorage.getItem("orders") || "[]"
-    );
-
-    const filteredOrders =
-      user?.role === "customer"
-        ? storedOrders.filter((o) => o.customerEmail === user.email)
-        : storedOrders;
-
-    setOrders(filteredOrders);
+    loadOrders();
   }, [user]);
 
-  const updateOrderStatus = (order: Order, newStatus: string) => {
-    const updatedOrders = orders.map((o) =>
-      o.id === order.id ? { ...o, status: newStatus } : o
+  const updateOrderStatus = (orderId: number, newStatus: Order["status"]) => {
+    const storedOrders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
+    const updatedOrders = storedOrders.map((o) =>
+      o.id === orderId ? { ...o, status: newStatus } : o
     );
-    setOrders(updatedOrders);
     localStorage.setItem("orders", JSON.stringify(updatedOrders));
+    loadOrders();
   };
 
   const handleCancel = (order: Order) => {
@@ -41,16 +64,15 @@ const Orders = () => {
     const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
 
     if (user?.role === "customer" && diffMinutes > 60) {
-      alert("You can cancel an order only within 1 hour of creation.");
+      alert("You can cancel an order only within 1 hour.");
       return;
     }
-
     if (order.status === "Accepted") {
-      alert("Order cannot be canceled as it is already accepted by manager.");
+      alert("Cannot cancel an accepted order.");
       return;
     }
 
-    updateOrderStatus(order, "Canceled");
+    updateOrderStatus(order.id, "Canceled");
   };
 
   const handleEdit = (order: Order) => {
@@ -59,20 +81,19 @@ const Orders = () => {
     const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
 
     if (user?.role === "customer" && diffMinutes > 60) {
-      alert("You can edit an order only within 1 hour of creation.");
+      alert("You can edit an order only within 1 hour.");
       return;
     }
-
     if (order.status === "Accepted") {
-      alert("Order cannot be edited as it is already accepted by manager.");
+      alert("Cannot edit an accepted order.");
       return;
     }
 
-    updateOrderStatus(order, "Edited");
+    updateOrderStatus(order.id, "Edited");
     alert(`Order #${order.id} edited successfully`);
   };
 
-  const getStatusClass = (status: string) => {
+  const getStatusClass = (status: Order["status"]) => {
     switch (status) {
       case "Accepted":
         return styles.accepted;
@@ -86,9 +107,9 @@ const Orders = () => {
         return "";
     }
   };
+
   const handleCreateOrder = () => {
-    // Navigate to create order page or open modal
-    alert("Redirect to create order page");
+    navigate("/create-order");
   };
 
   return (
@@ -97,16 +118,18 @@ const Orders = () => {
 
       {user?.role === "customer" && (
         <div className={styles.topBar}>
-        <button className={styles.addButton} onClick={handleCreateOrder}>
-          + Create Order
-        </button>
+          <button className={styles.addButton} onClick={handleCreateOrder}>
+            + Create Order
+          </button>
         </div>
       )}
+
       <table className={styles.table}>
         <thead>
           <tr>
             <th>ID</th>
             <th>Customer</th>
+            <th>Product</th> {/* added column */}
             <th>Status</th>
             <th>Amount</th>
             <th>Created At</th>
@@ -115,32 +138,29 @@ const Orders = () => {
         </thead>
         <tbody>
           {orders.length > 0 ? (
-            orders.map((o) => {
+            orders.map((order) => {
               const now = new Date();
-              const orderTime = new Date(o.createdAt);
-              const diffMinutes =
-                (now.getTime() - orderTime.getTime()) / (1000 * 60);
+              const orderTime = new Date(order.createdAt);
+              const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
               const canModify =
                 user?.role !== "customer" ||
                 (diffMinutes <= 60 &&
-                  o.status !== "Canceled" &&
-                  o.status !== "Accepted");
+                  order.status !== "Canceled" &&
+                  order.status !== "Accepted");
 
               return (
-                <tr key={o.id}>
-                  <td>{o.id}</td>
-                  <td>{o.customerEmail}</td>
-                  <td className={getStatusClass(o.status)}>{o.status}</td>
-                  <td>₹{o.amount}</td>
-                  <td>{new Date(o.createdAt).toLocaleString()}</td>
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.customerEmail}</td>
+                  <td>{order.productName}</td> {/* display product */}
+                  <td className={getStatusClass(order.status)}>{order.status}</td>
+                  <td>₹{order.amount}</td>
+                  <td>{new Date(order.createdAt).toLocaleString()}</td>
                   <td>
-                    <button onClick={() => handleEdit(o)} disabled={!canModify}>
+                    <button onClick={() => handleEdit(order)} disabled={!canModify}>
                       Edit
                     </button>
-                    <button
-                      onClick={() => handleCancel(o)}
-                      disabled={!canModify}
-                    >
+                    <button onClick={() => handleCancel(order)} disabled={!canModify}>
                       Cancel
                     </button>
                   </td>
@@ -149,7 +169,7 @@ const Orders = () => {
             })
           ) : (
             <tr>
-              <td colSpan={6} className={styles.noData}>
+              <td colSpan={7} className={styles.noData}> {/* updated colspan */}
                 No orders found
               </td>
             </tr>

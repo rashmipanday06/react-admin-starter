@@ -11,6 +11,7 @@ import NavBar from "./componetns/navbar";
 import CreateUser from "./componetns/user/createUser";
 import EditUser from "./componetns/user/editUser";
 import Orders from "./componetns/pages/order";
+import CreateOrder from "./componetns/orders/createOrder";
 
 function App() {
   const { token } = useAuth(); // ⬅ Get login status
@@ -68,6 +69,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
               <Orders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-order"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+              <CreateOrder />
             </ProtectedRoute>
           }
         />
