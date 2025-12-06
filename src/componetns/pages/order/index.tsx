@@ -16,7 +16,7 @@ const Orders = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
-
+// const navigate=useNavigate()
   // Load orders based on role
 const loadOrders = () => {
   const storedOrders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
@@ -88,7 +88,7 @@ const loadOrders = () => {
       alert("Cannot edit an accepted order.");
       return;
     }
-
+    navigate("/edit-order");
     updateOrderStatus(order.id, "Edited");
     alert(`Order #${order.id} edited successfully`);
   };

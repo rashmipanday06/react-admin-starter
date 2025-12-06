@@ -36,7 +36,7 @@ const Users = () => {
   const currentUsers = filtered.slice(startIndex, startIndex + usersPerPage);
 
   const handleAddUser = () => navigate("/create-user");
-  const handleUserEdit = (id: number) => navigate(`/edit-user/${id}`);
+  const    handleUserEdit = (id: number) => navigate(`/edit-user/${id}`);
   const handleDeleteClick = (id: number) => setDeleteId(id);
 
   const confirmDelete = () => {
