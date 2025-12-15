@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./style.module.css";
 import { useAuth } from "../../context/authContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Order {
   id: number;
   customerEmail: string;
-  productName: string; // added product name
+  productName: string;
   status: "Pending" | "Accepted" | "Canceled" | "Edited";
   amount: number;
   createdAt: string;
@@ -16,38 +18,48 @@ const Orders = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
-// const navigate=useNavigate()
-  // Load orders based on role
-const loadOrders = () => {
-  const storedOrders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
-  if (!user) {
-    setOrders([]);
-    return;
-  }
+  const [statusFilter, setStatusFilter] = useState<"All" | Order["status"]>("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5;
 
-  let filteredOrders: Order[] = [];
+  const loadOrders = () => {
+    const storedOrders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
+    if (!user) {
+      setOrders([]);
+      return;
+    }
 
-  switch (user.role) {
-    case "admin":
-    case "manager":
-      filteredOrders = storedOrders; // all orders
-      break;
-    case "customer":
-      filteredOrders = storedOrders.filter((o) => o.customerEmail === user.email);
-      break;
-    default:
-      filteredOrders = [];
-  }
+    let filteredOrders: Order[] = [];
+    switch (user.role) {
+      case "admin":
+      case "manager":
+        filteredOrders = storedOrders;
+        break;
+      case "customer":
+        filteredOrders = storedOrders.filter((o) => o.customerEmail === user.email);
+        break;
+      default:
+        filteredOrders = [];
+    }
 
-  // Sort by createdAt descending (newest first)
-  filteredOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    // Apply status filter
+    if (statusFilter !== "All") {
+      filteredOrders = filteredOrders.filter((o) => o.status === statusFilter);
+    }
 
-  setOrders(filteredOrders);
-};
+   
+
+    // Sort by newest first
+    filteredOrders.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    setOrders(filteredOrders);
+  };
 
   useEffect(() => {
     loadOrders();
-  }, [user]);
+  }, [user, statusFilter]);
 
   const updateOrderStatus = (orderId: number, newStatus: Order["status"]) => {
     const storedOrders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
@@ -56,19 +68,22 @@ const loadOrders = () => {
     );
     localStorage.setItem("orders", JSON.stringify(updatedOrders));
     loadOrders();
+    toast.success(`Order ${orderId} ${newStatus.toLowerCase()} successfully!`);
   };
 
   const handleCancel = (order: Order) => {
+    if (!window.confirm("Are you sure you want to cancel this order?")) return;
+
     const now = new Date();
     const orderTime = new Date(order.createdAt);
     const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
 
     if (user?.role === "customer" && diffMinutes > 60) {
-      alert("You can cancel an order only within 1 hour.");
+      toast.error("You can cancel an order only within 1 hour.");
       return;
     }
     if (order.status === "Accepted") {
-      alert("Cannot cancel an accepted order.");
+      toast.error("Cannot cancel an accepted order.");
       return;
     }
 
@@ -76,21 +91,23 @@ const loadOrders = () => {
   };
 
   const handleEdit = (order: Order) => {
+    if (!window.confirm("Are you sure you want to edit this order?")) return;
+
     const now = new Date();
     const orderTime = new Date(order.createdAt);
     const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
 
     if (user?.role === "customer" && diffMinutes > 60) {
-      alert("You can edit an order only within 1 hour.");
+      toast.error("You can edit an order only within 1 hour.");
       return;
     }
     if (order.status === "Accepted") {
-      alert("Cannot edit an accepted order.");
+      toast.error("Cannot edit an accepted order.");
       return;
     }
-    navigate("/edit-order");
+
     updateOrderStatus(order.id, "Edited");
-    alert(`Order #${order.id} edited successfully`);
+    navigate(`/edit-order/${order.id}`);
   };
 
   const getStatusClass = (status: Order["status"]) => {
@@ -112,11 +129,18 @@ const loadOrders = () => {
     navigate("/create-order");
   };
 
+  // Pagination
+  const indexOfLast = currentPage * ordersPerPage;
+  const indexOfFirst = indexOfLast - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(orders.length / ordersPerPage);
+
   return (
     <div className={styles.container}>
+      <ToastContainer />
       <h2 className={styles.title}>Orders</h2>
 
-      {user?.role === "customer" && (
+      {(user?.role === "customer" || user?.role === "admin") && (
         <div className={styles.topBar}>
           <button className={styles.addButton} onClick={handleCreateOrder}>
             + Create Order
@@ -124,12 +148,28 @@ const loadOrders = () => {
         </div>
       )}
 
+      <div className={styles.filterBar}>
+        <label>Status:</label>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value as any)}
+        >
+          <option value="All">All</option>
+          <option value="Pending">Pending</option>
+          <option value="Accepted">Accepted</option>
+          <option value="Canceled">Canceled</option>
+          <option value="Edited">Edited</option>
+        </select>
+
+       
+      </div>
+
       <table className={styles.table}>
         <thead>
           <tr>
             <th>ID</th>
             <th>Customer</th>
-            <th>Product</th> {/* added column */}
+            <th>Product</th>
             <th>Status</th>
             <th>Amount</th>
             <th>Created At</th>
@@ -137,8 +177,8 @@ const loadOrders = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.length > 0 ? (
-            orders.map((order) => {
+          {currentOrders.length > 0 ? (
+            currentOrders.map((order) => {
               const now = new Date();
               const orderTime = new Date(order.createdAt);
               const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
@@ -149,10 +189,17 @@ const loadOrders = () => {
                   order.status !== "Accepted");
 
               return (
-                <tr key={order.id}>
+                <tr
+                  key={order.id}
+                  className={styles.rowClickable}
+                  onClick={(e) => {
+                    if ((e.target as HTMLElement).tagName === "BUTTON") return;
+                    navigate(`/view-order/${order.id}`);
+                  }}
+                >
                   <td>{order.id}</td>
                   <td>{order.customerEmail}</td>
-                  <td>{order.productName}</td> {/* display product */}
+                  <td>{order.productName}</td>
                   <td className={getStatusClass(order.status)}>{order.status}</td>
                   <td>₹{order.amount}</td>
                   <td>{new Date(order.createdAt).toLocaleString()}</td>
@@ -169,13 +216,34 @@ const loadOrders = () => {
             })
           ) : (
             <tr>
-              <td colSpan={7} className={styles.noData}> {/* updated colspan */}
+              <td colSpan={7} className={styles.noData}>
                 No orders found
               </td>
             </tr>
           )}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className={styles.pagination}>
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

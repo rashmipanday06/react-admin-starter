@@ -12,6 +12,8 @@ import CreateUser from "./componetns/user/createUser";
 import EditUser from "./componetns/user/editUser";
 import Orders from "./componetns/pages/order";
 import CreateOrder from "./componetns/orders/createOrder";
+import EditOrder from "./componetns/orders/editOrder";
+import ViewOrder from "./componetns/orders/viewOrder";
 
 function App() {
   const { token } = useAuth(); // ⬅ Get login status
@@ -77,6 +79,22 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
               <CreateOrder />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-order/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+             <EditOrder/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-order/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+             <ViewOrder/>
             </ProtectedRoute>
           }
         />
