@@ -1,0 +1,200 @@
+.container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.topBar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.addButton {
+  background: #3b82f6;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.actions button {
+  margin-right: 10px;
+}
+
+.edit {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.delete {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.noData {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: white;
+}
+
+.paid {
+  background: #10b981;
+}
+
+.pending {
+  background: #f59e0b;
+}
+
+.cancelled {
+  background: #ef4444;
+}
+.createOrderBtn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.createOrderBtn:hover {
+  background-color: #45a049;
+}
+.noData {
+  text-align: center; /* centers text horizontally */
+  padding: 20px 0;   /* adds some vertical space */
+  color: #555;
+  font-size: 16px;
+}
+
+/* Button common styles */
+.table button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 6px;
+  transition: 0.2s ease;
+}
+
+/* Edit button */
+.table button:nth-child(1) {
+  background-color: #3b82f6; /* Blue */
+  color: #fff;
+}
+
+.table button:nth-child(1):hover {
+  background-color: #2563eb; /* Darker blue on hover */
+}
+
+/* Cancel button */
+.table button:nth-child(2) {
+  background-color: #dc2626; /* Red */
+  color: #fff;
+}
+
+.table button:nth-child(2):hover {
+  background-color: #b91c1c; /* Darker red on hover */
+}
+
+/* Disabled state */
+.table button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.rowClickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.rowClickable:hover {
+  background-color: #f1f1f1;
+}
+
+.filterBar {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.filterBar select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filterBar select,
+.filterBar input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.searchInput {
+  flex: 1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+}

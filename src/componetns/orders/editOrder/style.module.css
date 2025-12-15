@@ -1,0 +1,98 @@
+/* style.module.css */
+
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.formGroup input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.formGroup input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.buttonGroup button {
+  padding: 10px 18px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.buttonGroup button:first-child {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.buttonGroup button:first-child:hover {
+  background-color: #0056b3;
+}
+
+.buttonGroup button:last-child {
+  background-color: #ccc;
+  color: #333;
+}
+
+.buttonGroup button:last-child:hover {
+  background-color: #999;
+}
+
+/* Optional: add responsive design */
+@media (max-width: 480px) {
+  .container {
+    padding: 15px;
+    margin: 20px auto;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .formGroup input {
+    font-size: 14px;
+  }
+
+  .buttonGroup button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}

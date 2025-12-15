@@ -1,0 +1,79 @@
+.viewContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.card {
+  width: 100%;
+  max-width: 500px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.label {
+  font-weight: 500;
+  color: #555;
+}
+
+.status {
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.accepted {
+  background-color: green;
+}
+
+.pending {
+  background-color: orange;
+}
+
+.canceled {
+  background-color: red;
+}
+
+.edited {
+  background-color: blue;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.buttonGroup button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.2s;
+}
+
+.buttonGroup button:hover {
+  background-color: #0056b3;
+}

@@ -10,9 +10,13 @@ import ProtectedRoute from "./routes/protectedRoute";
 import NavBar from "./componetns/navbar";
 import CreateUser from "./componetns/user/createUser";
 import EditUser from "./componetns/user/editUser";
+import Orders from "./componetns/pages/order";
+import CreateOrder from "./componetns/orders/createOrder";
+import EditOrder from "./componetns/orders/editOrder";
+import ViewOrder from "./componetns/orders/viewOrder";
 
 function App() {
-  const { token } = useAuth();   // ⬅ Get login status
+  const { token } = useAuth(); // ⬅ Get login status
 
   return (
     <>
@@ -30,16 +34,17 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin", "manager"]}>
               <Dashboard />
             </ProtectedRoute>
           }
         />
 
+
         <Route
           path="/user"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin"]}>
               <Users />
             </ProtectedRoute>
           }
@@ -53,15 +58,46 @@ function App() {
             </ProtectedRoute>
           }
         />
-       <Route
-  path="/edit-user/:id"
-  element={
-    <ProtectedRoute>
-      <EditUser />
-    </ProtectedRoute>
-  }
-/>
-
+        <Route
+          path="/edit-user/:id"
+          element={
+            <ProtectedRoute>
+              <EditUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-order"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+              <CreateOrder />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-order/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+             <EditOrder/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-order/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+             <ViewOrder/>
+            </ProtectedRoute>
+          }
+        />
 
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
