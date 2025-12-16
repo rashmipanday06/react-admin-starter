@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styles from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../../common/modal";
-import Pagination from "../../common/pagination";
 
 interface User {
   id: number;
@@ -31,7 +30,6 @@ const Users = () => {
     u.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filtered.length / usersPerPage);
   const startIndex = (currentPage - 1) * usersPerPage;
   const currentUsers = filtered.slice(startIndex, startIndex + usersPerPage);
 
