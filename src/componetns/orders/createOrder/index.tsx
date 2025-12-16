@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/authContext";
 import styles from "./style.module.css";
 
 interface Product {
@@ -10,7 +9,6 @@ interface Product {
 
 interface Order {
   id: number;
-  customerEmail: string;
   productName: string;
   amount: number;
   status: "new" | "pending" | "accepted" | "completed" | "canceled";
@@ -25,10 +23,8 @@ const PRODUCTS: Product[] = [
 ];
 
 export default function CreateOrder() {
-  const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [customerEmail, setCustomerEmail] = useState(user?.email || "");
   const [productName, setProductName] = useState("");
   const [amount, setAmount] = useState(0);
 
@@ -44,7 +40,6 @@ export default function CreateOrder() {
 
     const newOrder: Order = {
       id: Date.now(),
-      customerEmail,
       productName,
       amount,
       status: "new",
@@ -62,11 +57,6 @@ export default function CreateOrder() {
     <div className={styles.container}>
       <h2>Create Order</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
-        {/* Customer (auto-filled) */}
-        <div className={styles.formGroup}>
-          <label>Customer</label>
-          <input type="text" value={customerEmail} disabled className={styles.disabledInput} />
-        </div>
 
         {/* Product dropdown */}
         <div className={styles.formGroup}>
