@@ -15,7 +15,7 @@
 /* Card Wrapper */
 .cardWrapper {
   display: flex;
-  gap: 8%;
+  gap: 8.6%;
   flex-wrap: wrap;
   margin-bottom: 30px;
 }
@@ -163,5 +163,41 @@
 
   .activityCard, .tableWrapper {
     max-width: 100%;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1300px) {
+  .cardWrapper{
+gap: 8.6%;
+  }
+   
+}
+@media (min-width: 1300px) and (max-width: 1400px) {
+  .cardWrapper{
+gap: 5.2%;
+  }
+   
+}
+@media (min-width: 1400px) and (max-width: 1500px) {
+  .cardWrapper{
+gap: 4%;
+  }
+   
+}
+@media (min-width: 1100px) and (max-width: 1200px) {
+  .cardWrapper{
+gap: 4%;
+  }
+   
+}
+
+
+/* Applies only between 600px and 1024px */
+@media (min-width: 600px) and (max-width: 1024px) {
+  body {
+    background-color: lightcoral;
+  }
+  .cardWrapper{
+gap: 6%;
   }
 }
