@@ -108,7 +108,7 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .topBar {
     flex-direction: column;
     gap: 12px;
@@ -117,4 +117,4 @@
   .search {
     width: 100%;
   }
-}
+} */
