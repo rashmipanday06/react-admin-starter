@@ -15,7 +15,7 @@
 /* Card Wrapper */
 .cardWrapper {
   display: flex;
-  gap: 8.6%;
+  gap: 9.3%;
   flex-wrap: wrap;
   margin-bottom: 30px;
 }
@@ -168,13 +168,25 @@
 
 @media (min-width: 1200px) and (max-width: 1300px) {
   .cardWrapper{
-gap: 8.6%;
+gap: 9%;
+  }
+   
+}
+@media (min-width: 1000px) and (max-width: 1100px) {
+  .cardWrapper{
+gap: 3.6%;
+  }
+   
+}
+@media (min-width: 700px) and (max-width: 800px) {
+  .cardWrapper{
+gap: 3%;
   }
    
 }
 @media (min-width: 1300px) and (max-width: 1400px) {
   .cardWrapper{
-gap: 5.2%;
+gap: 6.9%;
   }
    
 }
@@ -193,11 +205,22 @@ gap: 4%;
 
 
 /* Applies only between 600px and 1024px */
-@media (min-width: 600px) and (max-width: 1024px) {
+@media (min-width: 600px) and (max-width: 700px) {
   body {
     background-color: lightcoral;
   }
   .cardWrapper{
-gap: 6%;
+gap: 4%;
   }
+}
+
+@media (min-width: 800px) and (max-width:900px) {
+  .cardWrapper {
+ gap: 4.6%;
+}
+}
+@media (min-width: 400px) and (max-width:500px) {
+  .cardWrapper {
+ gap: 4.6%;
+}
 }

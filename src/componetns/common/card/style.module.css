@@ -35,9 +35,66 @@
  width: 170px;
   }}
 
-  @media (min-width: 700px) and (max-width: 1024px) {
+  @media (min-width: 700px) and (max-width: 700px) {
 
   .card{
  width: 156px;
+ padding: 0px;
   }
+}
+
+
+@media (min-width: 700px) and (max-width:800px) {
+  .card {
+ /* margin-bottom: 12px; */
+     padding: 8px;
+    width: 146px;
+}
+}
+@media (min-width: 800px) and (max-width:900px) {
+  .card {
+ margin-bottom: 12px;
+ padding: 4px;
+    width: 168px;
+}
+}
+@media (min-width: 1200px) and (max-width:1300px) {
+  .card {
+ margin-bottom: 12px;
+   padding: 16px;
+  width: 180px;
+}
+}
+@media (min-width: 1600px) and (max-width:1700px) {
+  .card {
+        padding: 33px;
+        width: 228px;
+    }
+
+}
+@media (min-width: 1400px) and (max-width:1500px) {
+  .card {
+        padding: 33px;
+        width: 240px;
+    }
+
+}
+@media (min-width: 400px) and (max-width:500px) {
+  .card {
+        padding: 10px;
+        width: 60px;
+    }
+    .card h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+}
+
+.card p {
+  margin-top: 6px;
+  font-size: 8px;
+  color: #666;
+}
+
 }
