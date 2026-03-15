@@ -14,6 +14,7 @@ import Orders from "./componetns/pages/order";
 import CreateOrder from "./componetns/orders/createOrder";
 import EditOrder from "./componetns/orders/editOrder";
 import ViewOrder from "./componetns/orders/viewOrder";
+import Footer from "./componetns/footer";
 
 function App() {
   const { token } = useAuth(); // ⬅ Get login status
@@ -102,6 +103,7 @@ function App() {
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer/>
     </>
   );
 }

@@ -1,0 +1,13 @@
+.adminFooter 
+ {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  background: #f4f6f9;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+}
