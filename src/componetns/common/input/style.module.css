@@ -1,9 +1,38 @@
-.inputWrapper {
-  border: 1px solid #d6cdcd;
-  border-radius: 2px;
-  height: 33px;
+/* Wrapper: fills whatever space the parent gives it (was width: 50%) */
+.containerWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   width: 100%;
+  min-width: 0;
 }
-.containerWrapper{
-  width: 50%;
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
+
+.inputWrapper {
+  width: 100%;
+  min-height: 44px;          /* comfortable touch target (was height: 33px) */
+  padding: 8px 10px;
+  border: 1px solid #d6cdcd;
+  border-radius: 6px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;           /* 16px stops iOS Safari zooming in on focus */
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inputWrapper:focus {
+  border-color: #333;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.inputWrapper:disabled {
+  background: #f3f3f3;
+  cursor: not-allowed;
 }
