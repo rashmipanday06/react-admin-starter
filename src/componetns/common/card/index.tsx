@@ -1,18 +1,14 @@
-import useCountUp from "../../../hooks/useCountUp";
 import styles from "./style.module.css";
 
 interface CardProps {
-  value: number | string;
+  value: string | number;
   label: string;
 }
 
-const Card: React.FC<CardProps> = ({ value, label }) => {
-  const isCurrency = typeof value === "string" && value.includes("₹");
-  const animatedValue = useCountUp(value);
-
+const Card = ({ value, label }: CardProps) => {
   return (
     <div className={styles.card}>
-      <h3>{isCurrency ? `₹${animatedValue}` : animatedValue}</h3>
+      <h3>{value}</h3>
       <p>{label}</p>
     </div>
   );

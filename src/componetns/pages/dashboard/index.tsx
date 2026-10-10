@@ -1,114 +1,168 @@
-import { useEffect, useState } from "react";
-import data from "../../../data/dashboardData.json";
-import Card from "../../common/card";
-import styles from "./style.module.css";
+import type { ReactNode } from "react";
+import { CircleDollarSign, Clock, ShoppingCart, Users } from "lucide-react";
+import StatCard from "../../StatCard";
+import RevenueChart from "../../RevenueChart";
+import {
+  monthlyRevenue,
+  ordersByStatus,
+  recentActivities,
+  recentOrders,
+  stats,
+  type OrderStatus,
+} from "../../../data/mockData";
 
-interface User {
-  id: number;
-  name: string;
-  email?: string;
-  role: string;
+const statusStyles: Record<OrderStatus, { badge: string; bar: string }> = {
+  completed: { badge: "bg-emerald-50 text-emerald-700", bar: "bg-emerald-500" },
+  processing: { badge: "bg-blue-50 text-blue-700", bar: "bg-blue-500" },
+  pending: { badge: "bg-amber-50 text-amber-700", bar: "bg-amber-500" },
+  cancelled: { badge: "bg-red-50 text-red-700", bar: "bg-red-500" },
+};
+
+const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+
+interface PanelProps {
+  title: string;
+  children: ReactNode;
+  className?: string;
 }
 
-interface Activity {
-  id: number;
-  activity: string;
-  time: string;
-}
+const Panel = ({ title, children, className = "" }: PanelProps) => (
+  <section
+    className={`min-w-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 ${className}`}
+  >
+    <h3 className="mb-4 text-base font-semibold text-slate-900 sm:text-lg">{title}</h3>
+    {children}
+  </section>
+);
 
 const Dashboard = () => {
-  const [dashboard, setDashboard] = useState<any>(null);
-  const [recentUsers, setRecentUsers] = useState<User[]>([]);
-  const [recentActivities, setRecentActivities] = useState<Activity[]>([]);
-
-  useEffect(() => {
-    // Load dashboard static data
-    setDashboard(data);
-
-    // Load recent users from localStorage
-    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
-    const sortedUsers = storedUsers.sort((a: User, b: User) => b.id - a.id);
-    setRecentUsers(sortedUsers.slice(0, 3));
-
-    // Load recent activities or set default
-    const storedActivity = JSON.parse(localStorage.getItem("activities") || "[]");
-    const defaultActivities: Activity[] = [
-      { id: 1, activity: "Admin logged in", time: "2 min ago" },
-      { id: 2, activity: "User Amit created a new account", time: "10 min ago" },
-      { id: 3, activity: "Order #1023 marked completed", time: "1 hour ago" },
-    ];
-    setRecentActivities(storedActivity.length > 0 ? storedActivity : defaultActivities);
-  }, []);
-
-  if (!dashboard) return <p>Loading...</p>;
-
-  const { stats } = dashboard;
-
-  const cardData = [
-    { value: stats.users, label: "Total Users" },
-    { value: stats.orders, label: "Total Orders" },
-    { value: `₹${stats.revenue}`, label: "Total Revenue" },
-    { value: stats.pending, label: "Pending Tasks" },
-  ];
+  const totalOrders = ordersByStatus.reduce((sum, s) => sum + s.count, 0);
 
   return (
-    <div className={styles.container}>
-      <h2>Admin Dashboard</h2>
-
-      {/* Stats Cards */}
-      <div className={styles.cardWrapper}>
-        {cardData.map((item, index) => (
-          <Card key={index} value={item.value} label={item.label} />
-        ))}
+    <div className="space-y-5 sm:space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold text-slate-900 sm:text-2xl">Admin Dashboard</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Here's what's happening with your store today.
+        </p>
       </div>
 
-      {/* Side-by-side Recent Users & Activities */}
-      <div className={styles.row}>
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="Total Users"
+          value={stats.users.toLocaleString("en-IN")}
+          icon={Users}
+          change={8.2}
+          tone="bg-blue-50 text-blue-600"
+        />
+        <StatCard
+          label="Total Orders"
+          value={stats.orders.toLocaleString("en-IN")}
+          icon={ShoppingCart}
+          change={4.6}
+          tone="bg-violet-50 text-violet-600"
+        />
+        <StatCard
+          label="Total Revenue"
+          value={inr(stats.revenue)}
+          icon={CircleDollarSign}
+          change={12.4}
+          tone="bg-emerald-50 text-emerald-600"
+        />
+        <StatCard
+          label="Pending Tasks"
+          value={stats.pending}
+          icon={Clock}
+          change={-3.1}
+          tone="bg-amber-50 text-amber-600"
+        />
+      </div>
 
-        {/* Recent Activities */}
-        <div className={styles.activityCard}>
-          <h3>Recent Activities</h3>
-          <div className={styles.activityList}>
-            {recentActivities.map((act) => (
-              <div key={act.id} className={styles.activityItem}>
-                <p className={styles.activityText}>{act.activity}</p>
-                <span className={styles.activityTime}>{act.time}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Revenue chart + order status */}
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 xl:grid-cols-3">
+        <Panel title="Revenue overview" className="xl:col-span-2">
+          <RevenueChart data={monthlyRevenue} />
+        </Panel>
 
-        {/* Recent Users Table */}
-        <div className={styles.tableWrapper}>
-          <h3>Recent Users</h3>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentUsers.length > 0 ? (
-                recentUsers.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.role}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={3} className={styles.noData}>
-                    No recent users found
-                  </td>
+        <Panel title="Orders by status">
+          <ul className="space-y-4">
+            {ordersByStatus.map(({ status, count }) => {
+              const pct = Math.round((count / totalOrders) * 100);
+              return (
+                <li key={status}>
+                  <div className="mb-1.5 flex items-center justify-between text-sm">
+                    <span className="capitalize text-slate-700">{status}</span>
+                    <span className="text-slate-500">
+                      {count} <span className="text-slate-400">({pct}%)</span>
+                    </span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className={`h-full rounded-full ${statusStyles[status].bar}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </Panel>
+      </div>
+
+      {/* Recent orders + activity */}
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 xl:grid-cols-3">
+        <Panel title="Recent orders" className="xl:col-span-2">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[480px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="bg-slate-50 text-slate-600">
+                  <th className="whitespace-nowrap px-3 py-2.5 font-semibold">Order</th>
+                  <th className="whitespace-nowrap px-3 py-2.5 font-semibold">Customer</th>
+                  <th className="whitespace-nowrap px-3 py-2.5 font-semibold">Date</th>
+                  <th className="whitespace-nowrap px-3 py-2.5 font-semibold">Amount</th>
+                  <th className="whitespace-nowrap px-3 py-2.5 font-semibold">Status</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {recentOrders.length > 0 ? (
+                  recentOrders.map((o) => (
+                    <tr key={o.id} className="transition-colors hover:bg-slate-50">
+                      <td className="whitespace-nowrap px-3 py-3 font-medium text-slate-900">{o.id}</td>
+                      <td className="px-3 py-3 text-slate-700">{o.customer}</td>
+                      <td className="whitespace-nowrap px-3 py-3 text-slate-500">{o.date}</td>
+                      <td className="whitespace-nowrap px-3 py-3 text-slate-900">{inr(o.amount)}</td>
+                      <td className="px-3 py-3">
+                        <span
+                          className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium capitalize ${statusStyles[o.status].badge}`}
+                        >
+                          {o.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="px-3 py-8 text-center text-slate-500">
+                      No orders yet. New orders will show up here.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Panel>
 
+        <Panel title="Recent activity">
+          <ul className="divide-y divide-slate-100">
+            {recentActivities.map((a) => (
+              <li key={a.id} className="flex flex-col gap-0.5 py-3 first:pt-0 last:pb-0">
+                <p className="break-words text-sm text-slate-700">{a.text}</p>
+                <span className="text-xs text-slate-400">{a.time}</span>
+              </li>
+            ))}
+          </ul>
+        </Panel>
       </div>
     </div>
   );

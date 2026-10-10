@@ -1,3 +1,4 @@
+
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./componetns/context/authContext";
 
@@ -17,94 +18,95 @@ import ViewOrder from "./componetns/orders/viewOrder";
 import Footer from "./componetns/footer";
 
 function App() {
-  const { token } = useAuth(); // ⬅ Get login status
+  const { token } = useAuth();
 
   return (
-    <>
-      {/* Show navbar only if logged in */}
+    <div className="flex min-h-screen flex-col">
       {token && <NavBar />}
 
-      <Routes>
-        {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+      <main className="flex-1 pb-16 sm:pb-8">
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Public login route */}
-        <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "manager"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Protected Routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "manager"]}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/user"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <Users />
+              </ProtectedRoute>
+            }
+          />
 
+          <Route
+            path="/create-user"
+            element={
+              <ProtectedRoute>
+                <CreateUser />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/user"
-          element={
-            <ProtectedRoute allowedRoles={["admin"]}>
-              <Users />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/edit-user/:id"
+            element={
+              <ProtectedRoute>
+                <EditUser />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/create-user"
-          element={
-            <ProtectedRoute>
-              <CreateUser />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/edit-user/:id"
-          element={
-            <ProtectedRoute>
-              <EditUser />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
-              <Orders />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/create-order"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
-              <CreateOrder />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/edit-order/:id"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
-             <EditOrder/>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/view-order/:id"
-          element={
-            <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
-             <ViewOrder/>
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+                <Orders />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* 404 page */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Footer/>
-    </>
+          <Route
+            path="/create-order"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+                <CreateOrder />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/edit-order/:id"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+                <EditOrder />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/view-order/:id"
+            element={
+              <ProtectedRoute allowedRoles={["admin", "manager", "customer"]}>
+                <ViewOrder />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 

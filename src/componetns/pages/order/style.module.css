@@ -1,191 +1,129 @@
 .container {
-  padding: 20px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(12px, 3vw, 20px);
+  box-sizing: border-box;
+}
+
+.container *,
+.container *::before,
+.container *::after {
+  box-sizing: border-box;
 }
 
 .title {
-  font-size: 24px;
-  margin-bottom: 20px;
+  margin: 0 0 20px;
+  font-size: clamp(20px, 1.1rem + 0.8vw, 24px);
 }
 
-.topBar {
+/* ===== Toolbar: filter (left) + create button (right), always one row ===== */
+.toolbar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   margin-bottom: 15px;
 }
 
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.filterBar label {
+  flex-shrink: 0;
+}
+
+.filterBar select {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 200px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
 .addButton {
+  flex-shrink: 0;
+  white-space: nowrap;
   background: #3b82f6;
   color: white;
-  padding: 10px 16px;
+  padding: 10px 14px;
   border: none;
   cursor: pointer;
   border-radius: 4px;
+  font-size: 14px;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
+.addButton:hover {
+  background: #2563eb;
 }
 
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
+/* ===== Status badges (white text on colour) ===== */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
 }
 
-.actions button {
-  margin-right: 10px;
-}
+.pending  { background: #f59e0b; }
+.accepted { background: #10b981; }
+.canceled { background: #ef4444; }
+.edited   { background: #3b82f6; }
 
-.edit {
-  background: #10b981;
-  color: white;
+/* ===== Row buttons ===== */
+.editBtn,
+.cancelBtn {
+  padding: 8px 12px;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-.delete {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+.editBtn { background-color: #3b82f6; }
+.editBtn:hover:not(:disabled) { background-color: #2563eb; }
+
+.cancelBtn { background-color: #dc2626; }
+.cancelBtn:hover:not(:disabled) { background-color: #b91c1c; }
+
+.editBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .noData {
   text-align: center;
-  padding: 20px;
-  color: #666;
-}
-
-.badge {
-  padding: 6px 10px;
-  border-radius: 4px;
-  color: white;
-}
-
-.paid {
-  background: #10b981;
-}
-
-.pending {
-  background: #f59e0b;
-}
-
-.cancelled {
-  background: #ef4444;
-}
-.createOrderBtn {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-bottom: 12px;
-}
-
-.createOrderBtn:hover {
-  background-color: #45a049;
-}
-.noData {
-  text-align: center; /* centers text horizontally */
-  padding: 20px 0;   /* adds some vertical space */
+  padding: 20px 0;
   color: #555;
   font-size: 16px;
 }
 
-/* Button common styles */
-.table button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  margin-right: 6px;
-  transition: 0.2s ease;
-}
-
-/* Edit button */
-.table button:nth-child(1) {
-  background-color: #3b82f6; /* Blue */
-  color: #fff;
-}
-
-.table button:nth-child(1):hover {
-  background-color: #2563eb; /* Darker blue on hover */
-}
-
-/* Cancel button */
-.table button:nth-child(2) {
-  background-color: #dc2626; /* Red */
-  color: #fff;
-}
-
-.table button:nth-child(2):hover {
-  background-color: #b91c1c; /* Darker red on hover */
-}
-
-/* Disabled state */
-.table button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.rowClickable {
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.rowClickable:hover {
-  background-color: #f1f1f1;
-}
-
-.filterBar {
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 500;
-}
-
-.filterBar select {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-.filterBar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.filterBar select,
-.filterBar input {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-.searchInput {
-  flex: 1;
-}
-
+/* ===== Pagination ===== */
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 12px 15px;
   margin-top: 15px;
 }
 
 .pagination button {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 6px;
   border: 1px solid #007bff;
   background-color: #007bff;
@@ -197,4 +135,152 @@ th, td {
   background-color: #ccc;
   border-color: #ccc;
   cursor: not-allowed;
+}
+
+/* =====================================================
+   PHONES (< 640px): each order becomes a card
+   ===================================================== */
+.table,
+.table tbody,
+.table tr,
+.table td {
+  display: block;
+  width: 100%;
+}
+
+.table thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.table tbody tr {
+  margin-bottom: 12px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.table td {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eee;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.table td[data-label]::before {
+  content: attr(data-label);
+  flex-shrink: 0;
+  font-weight: 600;
+  color: #555;
+  text-align: left;
+}
+
+.table td:last-child {
+  border-bottom: none;
+}
+
+.table td.actions {
+  gap: 8px;
+}
+
+.table td.actions button {
+  flex: 1;
+}
+
+.table td.noData {
+  justify-content: center;
+}
+
+.rowClickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* =====================================================
+   TABLET & UP (≥ 640px): normal table, scrolls if tight
+   ===================================================== */
+@media (min-width: 640px) {
+  .filterBar {
+    flex: 0 1 auto;
+  }
+
+  .addButton {
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+
+  .tableScroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #fff;
+  }
+
+  .table {
+    display: table;
+    min-width: 760px;
+    border-collapse: collapse;
+    background: white;
+  }
+
+  .table tbody { display: table-row-group; }
+  .table tr    { display: table-row; }
+  .table td    { display: table-cell; width: auto; }
+
+  .table thead {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    display: table-header-group;
+  }
+
+  .table tbody tr {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .table th,
+  .table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+
+  .table th {
+    white-space: nowrap;
+  }
+
+  .table td[data-label]::before {
+    content: none;
+  }
+
+  .table td.actions {
+    white-space: nowrap;
+  }
+
+  .table td.actions button {
+    flex: none;
+    margin-right: 6px;
+  }
+
+  .table td.noData {
+    text-align: center;
+  }
+
+  .rowClickable:hover {
+    background-color: #f1f1f1;
+  }
 }
