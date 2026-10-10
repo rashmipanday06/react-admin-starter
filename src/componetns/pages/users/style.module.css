@@ -1,31 +1,43 @@
 .container {
-  padding: 20px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(12px, 3vw, 20px);
   font-family: "Segoe UI", sans-serif;
+  box-sizing: border-box;
+}
+
+.container *,
+.container *::before,
+.container *::after {
+  box-sizing: border-box;
 }
 
 .title {
-  font-size: 28px;
+  margin: 0 0 20px;
+  font-size: clamp(22px, 1.2rem + 1vw, 28px);
   font-weight: 600;
-  margin-bottom: 20px;
   color: #333;
 }
 
-/* Top bar */
+/* ===== Top bar: stacked on phones, one row from 560px ===== */
 .topBar {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 .search {
+  width: 100%;
   padding: 10px 14px;
-  width: 250px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
 }
 
 .addButton {
+  width: 100%;
   background: #007bff;
   color: white;
   border: none;
@@ -40,40 +52,14 @@
   background: #005fcc;
 }
 
-/* Table */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
-}
-
-.table th,
-.table td {
-  padding: 14px 16px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-  font-size: 15px;
-}
-
-.table thead {
-  background: #f3f3f3;
-}
-
-.table tbody tr:hover {
-  background: #f9f9f9;
-}
-
-/* Actions */
+/* ===== Actions ===== */
 .actions {
   text-align: center;
 }
 
 .edit,
 .delete {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
   cursor: pointer;
   border-radius: 6px;
@@ -99,7 +85,6 @@
   background: #b02a37;
 }
 
-/* No data row */
 .noData {
   text-align: center;
   padding: 20px;
@@ -107,14 +92,168 @@
   font-size: 16px;
 }
 
-/* Responsive */
-/* @media (max-width: 768px) {
+/* =====================================================
+   PHONES (< 640px): each row becomes a card
+   ===================================================== */
+.table,
+.table tbody,
+.table tr,
+.table td {
+  display: block;
+  width: 100%;
+}
+
+/* hide header visually but keep it for screen readers */
+.table thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.table tbody tr {
+  margin-bottom: 12px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.table td {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.table td[data-label]::before {
+  content: attr(data-label);
+  flex-shrink: 0;
+  font-weight: 600;
+  color: #555;
+  text-align: left;
+}
+
+.table td:last-child {
+  border-bottom: none;
+}
+
+.table td.actions {
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.table td.actions .edit,
+.table td.actions .delete {
+  margin: 0;
+  flex: 1;
+}
+
+.table td.noData {
+  justify-content: center;
+  text-align: center;
+}
+
+/* =====================================================
+   TABLET & UP (≥ 640px): normal table
+   ===================================================== */
+@media (min-width: 640px) {
+  .tableScroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .table {
+    display: table;
+    min-width: 560px;
+    border-collapse: collapse;
+  }
+
+  .table tbody { display: table-row-group; }
+  .table tr    { display: table-row; }
+  .table td    { display: table-cell; width: auto; }
+
+  .table thead {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    display: table-header-group;
+    background: #f3f3f3;
+  }
+
+  .table tbody tr {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .table th,
+  .table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+  }
+
+  .table th {
+    white-space: nowrap;
+  }
+
+  .table td[data-label]::before {
+    content: none;
+  }
+
+  .table td.actions {
+    display: table-cell;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .table td.actions .edit,
+  .table td.actions .delete {
+    margin: 0 4px;
+    flex: none;
+    padding: 6px 12px;
+  }
+
+  .table td.noData {
+    text-align: center;
+  }
+
+  .table tbody tr:hover {
+    background: #f9f9f9;
+  }
+}
+
+/* ===== Top bar in one row from 560px ===== */
+@media (min-width: 560px) {
   .topBar {
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .search {
     width: 100%;
+    max-width: 320px;
   }
-} */
+
+  .addButton {
+    width: auto;
+    flex-shrink: 0;
+  }
+}

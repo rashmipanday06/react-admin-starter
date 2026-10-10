@@ -47,14 +47,12 @@ const Orders = () => {
       filteredOrders = filteredOrders.filter((o) => o.status === statusFilter);
     }
 
-   
-
-    // Sort by newest first
-    filteredOrders.sort(
+    // Sort by newest first (copy first so we never mutate the source array)
+    const sorted = [...filteredOrders].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
-    setOrders(filteredOrders);
+    setOrders(sorted);
   };
 
   useEffect(() => {
@@ -140,89 +138,106 @@ const Orders = () => {
       <ToastContainer />
       <h2 className={styles.title}>Orders</h2>
 
-      {(user?.role === "customer" || user?.role === "admin") && (
-        <div className={styles.topBar}>
+      {/* Filter + Create button in one row */}
+      <div className={styles.toolbar}>
+        <div className={styles.filterBar}>
+          <label htmlFor="statusFilter">Status:</label>
+          <select
+            id="statusFilter"
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value as "All" | Order["status"]);
+              setCurrentPage(1); // go back to page 1 when the filter changes
+            }}
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Canceled">Canceled</option>
+            <option value="Edited">Edited</option>
+          </select>
+        </div>
+
+        {(user?.role === "customer" || user?.role === "admin") && (
           <button className={styles.addButton} onClick={handleCreateOrder}>
             + Create Order
           </button>
-        </div>
-      )}
-
-      <div className={styles.filterBar}>
-        <label>Status:</label>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as any)}
-        >
-          <option value="All">All</option>
-          <option value="Pending">Pending</option>
-          <option value="Accepted">Accepted</option>
-          <option value="Canceled">Canceled</option>
-          <option value="Edited">Edited</option>
-        </select>
-
-       
+        )}
       </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Status</th>
-            <th>Amount</th>
-            <th>Created At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentOrders.length > 0 ? (
-            currentOrders.map((order) => {
-              const now = new Date();
-              const orderTime = new Date(order.createdAt);
-              const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
-              const canModify =
-                user?.role !== "customer" ||
-                (diffMinutes <= 60 &&
-                  order.status !== "Canceled" &&
-                  order.status !== "Accepted");
-
-              return (
-                <tr
-                  key={order.id}
-                  className={styles.rowClickable}
-                  onClick={(e) => {
-                    if ((e.target as HTMLElement).tagName === "BUTTON") return;
-                    navigate(`/view-order/${order.id}`);
-                  }}
-                >
-                  <td>{order.id}</td>
-                  <td>{order.customerEmail}</td>
-                  <td>{order.productName}</td>
-                  <td className={getStatusClass(order.status)}>{order.status}</td>
-                  <td>₹{order.amount}</td>
-                  <td>{new Date(order.createdAt).toLocaleString()}</td>
-                  <td>
-                    <button onClick={() => handleEdit(order)} disabled={!canModify}>
-                      Edit
-                    </button>
-                    <button onClick={() => handleCancel(order)} disabled={!canModify}>
-                      Cancel
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
+      <div className={styles.tableScroll}>
+        <table className={styles.table}>
+          <thead>
             <tr>
-              <td colSpan={7} className={styles.noData}>
-                No orders found
-              </td>
+              <th>ID</th>
+              <th>Customer</th>
+              <th>Product</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Created At</th>
+              <th>Actions</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentOrders.length > 0 ? (
+              currentOrders.map((order) => {
+                const now = new Date();
+                const orderTime = new Date(order.createdAt);
+                const diffMinutes = (now.getTime() - orderTime.getTime()) / (1000 * 60);
+                const canModify =
+                  user?.role !== "customer" ||
+                  (diffMinutes <= 60 &&
+                    order.status !== "Canceled" &&
+                    order.status !== "Accepted");
+
+                return (
+                  <tr
+                    key={order.id}
+                    className={styles.rowClickable}
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest("button")) return;
+                      navigate(`/view-order/${order.id}`);
+                    }}
+                  >
+                    <td data-label="ID">{order.id}</td>
+                    <td data-label="Customer">{order.customerEmail}</td>
+                    <td data-label="Product">{order.productName}</td>
+                    <td data-label="Status">
+                      <span className={`${styles.badge} ${getStatusClass(order.status)}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td data-label="Amount">₹{order.amount}</td>
+                    <td data-label="Created">{new Date(order.createdAt).toLocaleString()}</td>
+                    <td className={styles.actions}>
+                      <button
+                        className={styles.editBtn}
+                        onClick={() => handleEdit(order)}
+                        disabled={!canModify}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className={styles.cancelBtn}
+                        onClick={() => handleCancel(order)}
+                        disabled={!canModify}
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={7} className={styles.noData}>
+                  No orders found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination Controls */}
       {totalPages > 1 && (

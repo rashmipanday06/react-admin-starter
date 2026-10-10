@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from './style.module.css'
+import styles from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 
 const CreateUser = () => {
@@ -13,7 +13,7 @@ const CreateUser = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -53,64 +53,89 @@ const navigate=useNavigate()
     setSuccess("User created successfully!");
     setForm({ name: "", email: "", role: "", password: "" });
 
-    navigate("/user")
+    navigate("/user");
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.heading}>Create User</h2>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <h2 className={styles.heading}>Create User</h2>
 
-      {error && <p className={styles.error}>{error}</p>}
-      {success && <p className={styles.success}>{success}</p>}
+        {error && (
+          <p className={styles.error} role="alert">
+            {error}
+          </p>
+        )}
+        {success && (
+          <p className={styles.success} role="status">
+            {success}
+          </p>
+        )}
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <label className={styles.label}>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          className={styles.input}
-          placeholder="Enter full name"
-        />
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <label htmlFor="name" className={styles.label}>
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder="Enter full name"
+            autoComplete="name"
+          />
 
-        <label className={styles.label}>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          className={styles.input}
-          placeholder="Enter email"
-        />
+          <label htmlFor="email" className={styles.label}>
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder="Enter email"
+            autoComplete="email"
+          />
 
-        <label className={styles.label}>Role</label>
-        <select
-          name="role"
-          value={form.role}
-          onChange={handleChange}
-          className={styles.input}
-        >
-          <option value="">Select Role</option>
-          <option value="admin">Admin</option>
-          <option value="employee">Employee</option>
-          <option value="manager">Manager</option>
-        </select>
+          <label htmlFor="role" className={styles.label}>
+            Role
+          </label>
+          <select
+            id="role"
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            className={styles.input}
+          >
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
+          </select>
 
-        <label className={styles.label}>Password</label>
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          className={styles.input}
-          placeholder="Enter password"
-        />
+          <label htmlFor="password" className={styles.label}>
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            className={styles.input}
+            placeholder="Enter password"
+            autoComplete="new-password"
+          />
 
-        <button type="submit" className={styles.button}>
-          Create User
-        </button>
-      </form>
+          <button type="submit" className={styles.button}>
+            Create User
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

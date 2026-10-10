@@ -21,8 +21,8 @@ const Users = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("users") || "[]");
-    const sorted = stored.sort((a: User, b: User) => b.id - a.id);
+    const stored: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+    const sorted = [...stored].sort((a, b) => b.id - a.id);
     setAllUsers(sorted);
   }, []);
 
@@ -34,16 +34,16 @@ const Users = () => {
   const currentUsers = filtered.slice(startIndex, startIndex + usersPerPage);
 
   const handleAddUser = () => navigate("/create-user");
-  const    handleUserEdit = (id: number) => navigate(`/edit-user/${id}`);
+  const handleUserEdit = (id: number) => navigate(`/edit-user/${id}`);
   const handleDeleteClick = (id: number) => setDeleteId(id);
 
   const confirmDelete = () => {
     if (deleteId === null) return;
-    const stored = JSON.parse(localStorage.getItem("users") || "[]");
-    const updated = stored.filter((u: User) => u.id !== deleteId);
+    const stored: User[] = JSON.parse(localStorage.getItem("users") || "[]");
+    const updated = stored.filter((u) => u.id !== deleteId);
 
     localStorage.setItem("users", JSON.stringify(updated));
-    setAllUsers(updated);
+    setAllUsers([...updated].sort((a, b) => b.id - a.id));
     setDeleteId(null);
   };
 
@@ -68,48 +68,56 @@ const Users = () => {
         </button>
       </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {currentUsers.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-
-              <td className={styles.actions}>
-                <button className={styles.edit} onClick={() => handleUserEdit(user.id)}>
-                  Edit
-                </button>
-
-                <button className={styles.delete} onClick={() => handleDeleteClick(user.id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-
-          {currentUsers.length === 0 && (
+      <div className={styles.tableScroll}>
+        <table className={styles.table}>
+          <thead>
             <tr>
-              <td colSpan={5} className={styles.noData}>No users found</td>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
             </tr>
-          )}
-        </tbody>
-        
-      </table>
+          </thead>
+
+          <tbody>
+            {currentUsers.map((user) => (
+              <tr key={user.id}>
+                <td data-label="ID">{user.id}</td>
+                <td data-label="Name">{user.name}</td>
+                <td data-label="Email">{user.email}</td>
+                <td data-label="Role">{user.role}</td>
+
+                <td className={styles.actions}>
+                  <button
+                    className={styles.edit}
+                    onClick={() => handleUserEdit(user.id)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className={styles.delete}
+                    onClick={() => handleDeleteClick(user.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+
+            {currentUsers.length === 0 && (
+              <tr>
+                <td colSpan={5} className={styles.noData}>
+                  No users found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Use Common Pagination Component */}
- 
 
       {deleteId !== null && (
         <ConfirmModal

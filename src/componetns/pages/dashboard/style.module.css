@@ -1,70 +1,94 @@
-/* Dashboard Container */
+/* ===== Dashboard Container ===== */
 .container {
-  padding: 20px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: clamp(12px, 3vw, 20px);
   font-family: "Segoe UI", Arial, sans-serif;
+  box-sizing: border-box;
 }
 
-/* Page Heading */
+.container *,
+.container *::before,
+.container *::after {
+  box-sizing: border-box;
+}
+
+/* ===== Page Heading ===== */
 .container h2 {
-  margin-bottom: 25px;
-  font-size: 28px;
+  margin: 0 0 clamp(16px, 3vw, 25px);
+  font-size: clamp(22px, 1.2rem + 1vw, 28px);
   color: #333;
   font-weight: 600;
 }
 
-/* Card Wrapper */
+/* ===== Stat Cards =====
+   Mobile: 1 column | 560px+: 2 columns | 1024px+: 4 columns
+   Grid keeps equal spacing at every width, so no per-breakpoint gap overrides. */
 .cardWrapper {
-  display: flex;
-  gap: 9.3%;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
   margin-bottom: 30px;
 }
 
-/* Individual Card */
 .card {
+  width: 100%;
+  min-width: 0;
   background: #ffffff;
-  padding: 22px;
-  width: 220px;
+  padding: clamp(16px, 2.5vw, 22px);
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
 }
 
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
 .card h3 {
   margin: 0;
-  font-size: 30px;
+  font-size: clamp(24px, 1.2rem + 1vw, 30px);
   color: #222;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .card p {
-  margin-top: 8px;
+  margin: 8px 0 0;
   color: #666;
   font-size: 15px;
 }
 
-/* Flex Row for Users & Activities */
-.row {
-  display: flex;
-  gap: 20px;
-  margin-top: 30px;
-  flex-wrap: wrap;
+/* Hover lift only on devices that actually hover (avoids "stuck" hover on phones) */
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
 }
 
-/* Activity Card */
-.activityCard {
-  flex: 1;
-  max-width: 40%;
+/* ===== Activities + Users Row =====
+   Stacked below 1024px, side by side (1 : 1.5) from 1024px. */
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 30px;
+  align-items: start;
+}
+
+.activityCard,
+.tableWrapper {
+  min-width: 0; /* lets the table scroll inside the panel instead of stretching the grid */
   background: #fff;
-  padding: 18px;
+  padding: clamp(12px, 2vw, 18px);
   border-radius: 10px;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Activities ===== */
+.activityCard h3 {
+  margin: 0;
+  font-size: clamp(18px, 1rem + 0.5vw, 22px);
+  color: #333;
 }
 
 .activityList {
@@ -76,6 +100,8 @@
   border-bottom: 1px solid #eee;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .activityItem:last-child {
@@ -83,43 +109,47 @@
 }
 
 .activityText {
+  margin: 0;
+  min-width: 0;
   font-size: 14px;
   color: #333;
+  overflow-wrap: anywhere;
 }
 
 .activityTime {
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 12px;
   color: #888;
 }
 
-/* Table Wrapper */
-.tableWrapper {
-  flex: 1.5;
-  background: #fff;
-  padding: 18px;
-  border-radius: 10px;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-}
-
+/* ===== Table ===== */
 .tableWrapper h3 {
-  font-size: 22px;
-  margin-bottom: 15px;
+  margin: 0 0 15px;
+  font-size: clamp(18px, 1rem + 0.7vw, 22px);
   color: #333;
 }
 
-/* Table */
+/* Scroll container: table scrolls sideways on narrow screens */
+.tableScroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+}
+
 .table {
   width: 100%;
+  min-width: 320px;
   border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
 }
 
 .table th,
 .table td {
-  padding: 14px 16px;
+  padding: clamp(10px, 1.6vw, 14px) clamp(10px, 2vw, 16px);
   text-align: left;
-  font-size: 15px;
+  font-size: clamp(14px, 0.85rem + 0.2vw, 15px);
+  overflow-wrap: anywhere;
 }
 
 .table thead {
@@ -129,15 +159,21 @@
 .table th {
   font-weight: 600;
   color: #444;
+  white-space: nowrap;
 }
 
 .table tbody tr:nth-child(even) {
   background: #fafafa;
 }
 
-.table tbody tr:hover {
-  background-color: #f0f8ff;
-  transition: 0.2s ease;
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .table tbody tr:hover {
+    background-color: #f0f8ff;
+  }
 }
 
 .table td {
@@ -145,82 +181,35 @@
 }
 
 .noData {
-  text-align: center;
+  text-align: center !important;
   padding: 12px;
   color: #888;
   font-size: 14px;
 }
 
-/* Responsive for Mobile */
-@media (max-width: 768px) {
-  .card {
-    width: 100%;
+/* ===== Small phones: time drops under the activity text ===== */
+@media (max-width: 479px) {
+  .activityItem {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+/* ===== Tablets / large phones: 2 stat cards per row ===== */
+@media (min-width: 560px) {
+  .cardWrapper {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ===== Desktop: 4 stat cards, activities + users side by side ===== */
+@media (min-width: 1024px) {
+  .cardWrapper {
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .row {
-    flex-direction: column;
+    grid-template-columns: 2fr 3fr; /* same 1 : 1.5 ratio as before */
   }
-
-  .activityCard, .tableWrapper {
-    max-width: 100%;
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1300px) {
-  .cardWrapper{
-gap: 9%;
-  }
-   
-}
-@media (min-width: 1000px) and (max-width: 1100px) {
-  .cardWrapper{
-gap: 3.6%;
-  }
-   
-}
-@media (min-width: 700px) and (max-width: 800px) {
-  .cardWrapper{
-gap: 3%;
-  }
-   
-}
-@media (min-width: 1300px) and (max-width: 1400px) {
-  .cardWrapper{
-gap: 6.9%;
-  }
-   
-}
-@media (min-width: 1400px) and (max-width: 1500px) {
-  .cardWrapper{
-gap: 4%;
-  }
-   
-}
-@media (min-width: 1100px) and (max-width: 1200px) {
-  .cardWrapper{
-gap: 4%;
-  }
-   
-}
-
-
-/* Applies only between 600px and 1024px */
-@media (min-width: 600px) and (max-width: 700px) {
-  body {
-    background-color: lightcoral;
-  }
-  .cardWrapper{
-gap: 4%;
-  }
-}
-
-@media (min-width: 800px) and (max-width:900px) {
-  .cardWrapper {
- gap: 4.6%;
-}
-}
-@media (min-width: 400px) and (max-width:500px) {
-  .cardWrapper {
- gap: 4.6%;
-}
 }
